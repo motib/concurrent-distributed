@@ -12,6 +12,8 @@ This program archive is divided into directories containing programs in five lan
 
 There are three types of files: h-files are include files, pml-files are Promela language files and prp-files contain LTL expressions for proving programs.
 
+There is a separate directory for versions of the programs that can be processed by my [Erigone model checker](https://github.com/motib/erigone).
+
 h-files         Contents    
 
     critical        Critical section declarations (read comments on how to use)    
