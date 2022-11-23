@@ -6,7 +6,7 @@ Addison-Wesley, 2006. [ISBN 0-321-31283-X](https://www.pearson.com/en-us/subject
 	
 An introduction to concurrent and distributed algorithms that use the synchronization primitives: semaphores, monitors, channels, rendezvous, spaces and token passing.  Another major topic is verification using deductive methods, temporal logic and model checking. 
 
-This program archive is divided into directories containing programs in five languages. The software was developed on a Windows XP platform using the following versions of the software:
+This program archive is divided into directories containing programs in five languages.
 
 ## Promela
 
