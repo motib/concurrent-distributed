@@ -1,0 +1,39 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+monitor monsemaphore {
+int	semvalue = 1;
+condition notbusy;
+
+void monp()
+{
+	if (semvalue == 0) 
+		waitc(notbusy);
+	else
+		semvalue = semvalue - 1;
+}
+
+void monv()
+{
+	if (empty(notbusy)) 
+		semvalue = semvalue + 1;
+	else
+		signalc(notbusy);
+}
+
+}
+
+int n;
+
+void inc(int i)
+{
+  monp();
+  n = n + 1;
+  monv();
+}
+
+main() {
+  cobegin { 
+  	inc(1); inc(2);
+  }
+  cout << n;
+}

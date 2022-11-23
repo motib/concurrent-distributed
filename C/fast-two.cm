@@ -1,0 +1,94 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+const int P = 1; 
+const int Q = 2;
+int gate1 = 0;
+int gate2 = 0;
+int wantp = 0;
+int wantq = 0;
+
+void pp() {
+int OK;
+    while (1) 
+      {
+      cout << "process p non-critical section\n";
+      OK = 0;
+      while (OK==0)
+          {
+          wantp = 1;
+          gate1 = P;
+          if (gate2 != 0 )
+            {
+            wantp = 0;
+            while (!(gate2 == 0));
+            }
+          else 
+              {
+              gate2 = P;
+              if (gate1 != P)
+                 {
+                 wantp = 0;
+                 while (!(wantq == 0));
+                 if (gate2 != P)
+                   {
+                   while (!(gate2 == 0));
+                   }
+                 else
+                   OK = 1;
+                 }
+              else 
+                OK = 1;
+              }
+          }
+      cout << "process p critical section\n";
+      gate2 = 0;
+      wantp = 0;
+      }
+}
+
+void qq() {
+int OK;
+    while (1) 
+      {
+      cout << "process q non-critical section\n";
+      OK = 0;
+      while (OK==0)
+          {
+          wantq = 1;
+          gate1 = Q;
+          if (gate2 != 0 )
+            {
+            wantq = 0;
+            while (!(gate2 == 0));
+            }
+          else 
+              {
+              gate2 = Q;
+              if (gate1 != Q)
+                 {
+                 wantq = 0;
+                 while (!(wantp == 0));
+                 if (gate2 != Q)
+                   {
+                   while (!(gate2 == 0));
+                   }
+                 else
+                   OK = 1;
+                 }
+              else 
+                OK = 1;
+              }
+          }
+      cout << "process q critical section\n";
+      gate2 = 0;
+      wantq = 0;
+      }
+}
+
+main() {
+  cobegin {
+    pp();
+    qq();
+    }
+}
+

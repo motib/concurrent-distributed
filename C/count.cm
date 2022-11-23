@@ -1,0 +1,20 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+int n = 0;
+void p() {
+  int temp, i;
+  for (i = 0; i < 10; i++) {
+    temp = n;
+    n = temp + 1;
+  }
+}
+void q() {
+  int temp, i;
+  for (i = 0; i < 10; i++) {
+    temp = n;
+    n = temp + 1;
+  }
+}
+void main() {
+  cobegin { p(); q(); }
+  cout << "The value of n is " << n << "\n";
+}

@@ -1,0 +1,35 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+int np = 0;
+int  nq = 0;
+
+void p()
+{
+    while (1)
+      {
+      cout << "process p non-critical section\n";
+      np = nq + 1;
+      while (!( (nq == 0) || (np <= nq) ));
+      cout << "process p critical section\n";
+      np = 0;
+      }
+}
+
+void q()
+{
+    while (1)
+      {
+      cout << "process q non-critical section\n";
+      nq = np + 1;
+      while (!( (np == 0) || (nq < np) ));
+      cout << "process q critical section\n";
+      nq = 0;
+      }
+}
+
+main() {
+  cobegin {
+    p();
+    q();
+  }
+}

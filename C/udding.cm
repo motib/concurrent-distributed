@@ -1,0 +1,37 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+semaphore gate1 = 1;
+semaphore gate2 = 0;
+semaphore onlyOne = 1;
+int numGate1 = 0, numGate2 = 0;
+
+void p(int N)
+{
+    while (1) 
+      {
+      cout << "process " << N << " non-critical section\n";
+      wait(gate1);
+      numGate1 = numGate1 + 1;
+      signal(gate1);
+      wait(onlyOne);
+      wait(gate1);
+      numGate1 = numGate1 - 1;
+      numGate2 = numGate2 + 1;
+      if (numGate1 > 0)  signal(gate1);
+      else signal(gate2);
+      signal(onlyOne);
+      wait(gate2);
+      numGate2 = numGate2 - 1;
+      cout << "process " << N << " critical section\n";
+      if (numGate2 > 0)  signal(gate2);
+      else signal(gate1);
+      }
+}
+
+main()
+{
+  cobegin {
+    p(0); p(1); p(2);
+  }
+}
+

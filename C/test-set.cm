@@ -1,0 +1,41 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+atomic int test_and_set(int & target)
+{
+    int u;
+    u = target;
+    target = 1;
+    return u;
+}
+
+int common = 0;
+
+void p()
+{
+    while (1) 
+      {
+      cout << "process p non-critical section\n";
+      while (test_and_set(common));
+      cout << "process p critical section\n";
+      common = 0;
+      }
+}
+
+void q()
+{
+    while (1) 
+      {
+      cout << "process q non-critical section\n";
+      while (test_and_set(common));
+      cout << "process q critical section\n";
+      common = 0;
+      }
+}
+
+main() {
+  cobegin {
+    p();
+    q();
+  }
+}
+

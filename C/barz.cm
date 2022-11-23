@@ -1,0 +1,30 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+binarysem gate = 1;
+binarysem S = 1;
+int count = 3;
+
+void p(int N)
+{
+    while (1) 
+      {
+      cout << "process " << N << " non-critical section\n";
+      wait(gate);
+      wait(S);
+      count = count - 1;
+      if (count > 0) signal(gate);
+      signal(S);
+      cout << "process " << N << " critical section\n";
+      wait(S);
+      count = count + 1;
+      if (count == 1)  signal(gate);
+      signal(S);
+      }
+}
+
+main() {
+  cobegin {
+    p(0); p(1); p(2);
+  
+	}
+}

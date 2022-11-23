@@ -1,0 +1,91 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+const int M = 5;
+
+binarysem Fork1 = 1;
+binarysem Fork2 = 1;
+binarysem Fork3 = 1;
+binarysem Fork4 = 1;
+binarysem Fork5 = 1;
+semaphore Room = 4;
+
+void Phil1() {
+int I;
+  for (I = 1; I <= M; I++) 
+    {
+    wait(Room);
+    wait(Fork1);
+    wait(Fork2);
+    cout << "P1 is eating\n";
+    signal(Fork2);
+    signal(Fork1);
+    signal(Room);
+    }
+}
+
+void Phil2() {
+int I;
+  for (I = 1; I <= M; I++) 
+    {
+    wait(Room);
+    wait(Fork2);
+    wait(Fork3);
+    cout << "P2 is eating\n";
+    signal(Fork3);
+    signal(Fork2);
+    signal(Room);
+    }
+}
+
+void Phil3() {
+int I;
+  for (I = 1; I <= M; I++) 
+    {
+    wait(Room);
+    wait(Fork3);
+    wait(Fork4);
+    cout << "P3 is eating\n";
+    signal(Fork4);
+    signal(Fork3);
+    signal(Room);
+    }
+}
+
+void Phil4() {
+int I;
+  for (I = 1; I <= M; I++) 
+    {
+    wait(Room);
+    wait(Fork4);
+    wait(Fork5);
+    cout << "P4 is eating\n";
+    signal(Fork5);
+    signal(Fork4);
+    signal(Room);
+    }
+}
+
+void Phil5() {
+int I;
+  for (I = 1; I <= M; I++) 
+    {
+    wait(Room);
+    wait(Fork5);
+    wait(Fork1);
+    cout << "P5 is eating\n";
+    signal(Fork5);
+    signal(Fork1);
+    signal(Room);
+    }
+}
+
+main() {
+  cobegin {
+    Phil1();
+    Phil2();
+    Phil3();
+    Phil4();
+    Phil5();
+  }
+}
+

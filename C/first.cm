@@ -1,0 +1,33 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+int turn = 1;
+
+void p()
+{
+    while (1) 
+      {
+      cout << "process p non-critical section\n";
+      while (!(turn == 1));
+      cout << "process p critical section\n";
+      turn = 2;
+      }
+}
+
+void q()
+{
+    while (1) 
+      {
+      cout << "process q non-critical section\n";
+      while (!(turn == 2));
+      cout << "process q critical section\n";
+      turn = 1;
+      }
+}
+
+main() {
+  cobegin {
+    p();
+    q();
+    }
+}
+

@@ -1,0 +1,45 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+const int K = 20;
+const int N = 10;
+int   B[N];
+int   inptr = 0, outptr = 0, count = 0;
+binarysem S = 1;
+binarysem notfull = 1;
+binarysem notempty = 0;
+
+void Producer()
+{
+int I; 
+    for (I = 0; I < K; I++)
+      {
+      cout << "Produce " << I << "\n";
+      if (count == N) wait(notfull);
+      wait(S);
+      B[inptr] = I;
+      inptr = (inptr + 1) % N;
+      count = count + 1;
+      signal(S);
+      if (count == 1) signal(notempty);
+      }
+}
+
+void Consumer()
+{
+int I, V;
+    for (I = 0; I < K; I++)
+      {
+      if (count == 0) wait(notempty);
+      wait(S);
+      V = B[outptr];
+      outptr = (outptr + 1) % N;
+      count = count - 1;
+      signal(S);
+      if (count == (N-1))  signal(notfull);
+      cout << "Consume " << V << "\n";
+      }
+}
+
+main() {
+  cobegin { Producer(); Consumer(); }
+}

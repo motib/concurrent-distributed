@@ -1,0 +1,41 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+const int NODES = 3;
+      int number[NODES];
+
+  atomic int Max() {
+  int Current = 0;
+  int I;
+    for (I=0; I < NODES; I++) 
+      if (number[I] > Current)
+        Current = number[I];
+    return Current + 1;
+  }
+
+    void p(int i) {
+    int j;
+        while (1)
+          {
+          cout << "process " << i << " non-critical section\n";
+          number[i] = Max();
+         for (j=0; j <NODES; j++) 
+            if (j != i)
+              {
+              while (!
+                 ((number[j]==0) || (number[i] < number[j]) ||
+                 ((number[i]==number[j]) && (i < j))) );
+              }
+          cout << "process " << i << " critical section\n";
+          number[i]=0;
+          }
+    }
+
+main() {
+
+  int j;
+  for (j=0; j <NODES; j++) number[j]=0;
+  cobegin {
+    p(0); p(1); p(2);
+  }
+}
+

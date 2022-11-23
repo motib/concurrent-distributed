@@ -1,0 +1,36 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+int wantp = 0;
+int wantq = 0;
+
+void p()
+{
+    while (1) 
+      {
+      cout << "process p critical section\n";
+      while (!(wantq == 0));
+      wantp = 1;
+      cout << "process p critical section\n";
+      wantp = 0;
+      }
+}
+
+void q()
+{
+    while (1) 
+      {
+      cout << "process q non-critical section\n";
+      while (!(wantp == 0));
+      wantq = 1;
+      cout << "process q critical section\n";
+      wantq = 0;
+      }
+}
+
+main() {
+  cobegin {
+    p();
+    q();
+    }
+}
+

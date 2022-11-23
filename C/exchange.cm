@@ -1,0 +1,44 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+atomic void exchange(int & x, int & y) {
+int temp;
+    temp = x;
+    x = y;
+    y = temp;
+}
+
+int common = 1;
+
+void p() {
+int local;
+    while (1) 
+      {
+      cout << "process p non-critical section\n";
+      do {
+        exchange(common, local);
+      } while (local != 1);
+      cout << "process p critical section\n";
+      exchange(common, local);
+      }
+}
+
+void q() {
+int local;
+    while (1) 
+      {
+      cout << "process q non-critical section\n";
+      do {
+        exchange(common, local);
+      } while (local != 1);
+      cout << "process q critical section\n";
+      exchange(common, local);
+      }
+}
+
+main() {
+  cobegin {
+    p();
+    q();
+  }
+}
+

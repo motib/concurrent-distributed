@@ -1,0 +1,56 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+const int N = 3; 
+const int Q = 2;
+int gate1 = 0;
+int gate2 = 0;
+int want[3];
+
+void p(int I) {
+int OK, j;
+    while (1) 
+      {
+      cout << "process " << I << " non-critical section\n";
+      OK = 0;
+      while (OK==0)
+          {
+          want[I] = 1;
+          gate1 = I;
+          if (gate2 != 0 )
+            {
+            want[I] = 0;
+            while (!(gate2 == 0));
+            }
+          else 
+              {
+              gate2 = I;
+              if (gate1 != I)
+                 {
+                 want[I] = 0;
+                 for (j = 0; j < N; j++)
+                    while (!(want[j] == 0));
+                 if (gate2 != I)
+                   {
+                   while (!(gate2 == 0));
+                   }
+                 else
+                   OK = 1;
+                 }
+              else 
+                OK = 1;
+              }
+          }
+      cout << "process " << I << " critical section\n";
+      gate2 = 0;
+      want[I] = 0;
+      }
+}
+
+main() {
+  int j;
+  for (j = 0; j < N; j++) want[j] = 0;
+  cobegin {
+    p(0); p(1); p(2);
+    }
+}
+

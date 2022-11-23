@@ -1,0 +1,24 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+
+binarysem	Fork[5];
+
+void Phil(int N) {
+int I;
+  for (I = 0; I < 10; I++) 
+    {
+    wait(Fork[N]);
+    wait(Fork[(N+1) % 5]);
+    cout << "Phil " << N << " is eating\n";
+    signal(Fork[(N+1) % 5]);
+    signal(Fork[N]);
+    }
+}
+
+
+main() {
+int K;
+  for (K = 0; K < 4; K++) initialsem(Fork[K], 1);
+  cobegin { 
+    Phil(0); Phil(1); Phil(2); Phil(3); Phil(4);  
+  }
+}

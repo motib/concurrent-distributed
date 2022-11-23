@@ -1,0 +1,86 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+const int Last = 20;
+
+int A[Last];
+int A1[Last];
+int A2[Last];
+int N1, N2;
+int I;
+binarysem Sort1Finished = 0;
+binarysem Sort2Finished = 0;
+
+void Sort1()
+{
+int I, J, Temp, IMin;
+  for (I = 0; I < N1; I++)
+    {
+      IMin = I;
+      for (J = I+1; J < N1; J++)
+        if (A1[J] < A1[IMin]) 
+          IMin = J;
+      Temp = A1[I]; A1[I] = A1[IMin]; A1[IMin] = Temp;
+      }
+  signal(Sort1Finished);
+}
+
+void Sort2()
+{
+int I, J, Temp, IMin;
+  for (I = 0; I < N2; I++)
+    {
+      IMin = I;
+      for (J = I+1; J < N2; J++)
+        if (A2[J] < A2[IMin]) 
+          IMin = J;
+      Temp = A2[I]; A2[I] = A2[IMin]; A2[IMin] = Temp;
+      }
+  signal(Sort2Finished);
+}
+
+void Merge()
+{
+int IA, IB, IC;
+  wait(Sort1Finished);
+  wait(Sort2Finished);
+  IA = 0; IB = 0; IC = 0;
+  while ((IA < N1) && (IB < N2 ))
+    {
+      if (A1[IA] < A2[IB]) 
+        { A[IC] = A1[IA]; IA = IA + 1; }
+      else
+        { A[IC] = A2[IB]; IB = IB + 1;}
+    IC = IC + 1;
+    }
+  while (IA < N1)
+    { A[IC] = A1[IA]; IC = IC + 1; IA = IA + 1; } 
+  while (IB < N2)
+    { A[IC] = A2[IB]; IC = IC + 1; IB = IB + 1; }
+}
+
+main() 
+{
+  A1[0] = 4; A1[1] = 1; A1[2] = 7; A1[3] = 5; A1[4] = 0;
+  A2[0] = 8; A2[1] = 2; A2[2] = 6; A2[3] = -1;
+  N1 = 5; N2 = 4;
+  cout << "A1 = "; 
+  for (I = 0; I < N1; I++) cout << A1[I] << " ";
+  cout << "\n";
+  cout << "A2 = "; 
+  for (I = 0; I < N2; I++) cout << A2[I] << " ";
+  cout << "\n";
+  cobegin {
+    Sort1();
+    Sort2();
+    Merge();
+  }
+  cout << "A1 = "; 
+  for (I = 0; I < N1; I++) cout << A1[I] << " ";
+  cout << "\n";
+  cout << "A2 = "; 
+  for (I = 0; I < N2; I++) cout << A2[I] << " ";
+  cout << "\n";
+  cout << "A = "; 
+  for (I = 0; I < N1+N2; I++) cout << A[I] << " ";
+  cout << "\n";
+}
+

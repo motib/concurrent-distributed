@@ -1,0 +1,31 @@
+/* Copyright (C) 2006 M. Ben-Ari. See copyright.txt */
+int n = 0;
+    semaphore s = 1;
+
+void p() {
+  int temp, i;
+  for (i = 0; i < 10; i++) {
+    wait(s);
+    temp = n;
+    n = temp + 1;
+    signal(s);
+  }
+}
+
+void q() {
+  int temp, i;
+  for (i = 0; i < 10; i++) {
+    wait(s);
+    temp = n;
+    n = temp + 1;
+    signal(s);
+  }
+}
+
+void main() {
+  cobegin {
+    p();
+    q();
+  }
+  cout << "The value of n is " << n;
+}
